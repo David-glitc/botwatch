@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>botwatch · Telegram alerts for BOT Chain</title>
+<meta name="description" content="A Telegram bot that messages you when a BOT Chain wallet or contract has new transactions, or when a BDEX price crosses your line. Read-only, no keys. Bot launching soon.">
+<meta property="og:title" content="botwatch · Telegram alerts for BOT Chain"><meta property="og:description" content="Wallet and contract activity alerts plus one-shot price alerts, straight to Telegram. Read-only. Bot launching soon."><meta property="og:type" content="website"><meta property="og:url" content="https://botwatchbot.vercel.app/">
+<meta name="twitter:card" content="summary"><meta name="theme-color" content="#2AABEE">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Roboto+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#EAF4FB;--card:#fff;--ink:#0F2233;--mute:#5A7184;--tg:#2AABEE;--tg2:#1B8FCB;--out:#E1FFC7;--line:#cfe2f0}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 Manrope,system-ui,sans-serif}
+h1,h2,h3{margin:0;line-height:1.1;font-weight:800}
+.wrap{max-width:980px;margin:0 auto;padding:0 20px}
+nav{display:flex;justify-content:space-between;align-items:center;padding:18px 0}
+nav b{display:flex;gap:10px;align-items:center;font-size:20px}nav img{width:30px}
+nav a{margin-left:18px;color:var(--mute);text-decoration:none;font-weight:600;font-size:14px}
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:36px;align-items:center;padding:36px 0 50px}
+.hero h1{font-size:clamp(36px,6vw,62px);letter-spacing:-.03em;margin-bottom:16px}
+.hero h1 span{color:var(--tg)}
+.hero p{color:var(--mute);font-size:18px;max-width:520px}
+.soon{display:inline-flex;gap:8px;align-items:center;background:var(--card);border:2px dashed var(--tg);color:var(--tg2);border-radius:14px;padding:10px 16px;font-weight:700;margin-top:10px}
+.dot{width:9px;height:9px;border-radius:50%;background:#f5a524;box-shadow:0 0 0 4px #f5a52433}
+.phone{background:#dbe8f3;border-radius:28px;padding:16px;border:8px solid #0F2233;max-width:380px;justify-self:center;width:100%}
+.msg{background:var(--card);border-radius:4px 16px 16px 16px;padding:10px 12px;margin:0 0 10px;font-size:14px;box-shadow:0 1px 1px #0001;max-width:92%}
+.msg.me{background:var(--out);border-radius:16px 4px 16px 16px;margin-left:auto;font-family:'Roboto Mono',monospace;font-size:13px;width:fit-content}
+.msg small{display:block;color:var(--mute);font-size:11px;margin-top:4px}
+.msg code{font-family:'Roboto Mono',monospace;font-size:12px;word-break:break-all}
+.phone p.cap{font-size:11px;text-align:center;color:var(--mute);margin:8px 0 0}
+section{padding:40px 0}
+h2{font-size:clamp(26px,4vw,38px);margin-bottom:10px}
+.lead{color:var(--mute);margin:0 0 22px;max-width:620px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px}
+.card h3{font-size:18px;margin-bottom:6px}.card p{margin:0;color:var(--mute);font-size:15px}
+.cmd{font-family:'Roboto Mono',monospace;font-size:13px;background:#eaf4fb;color:var(--tg2);padding:3px 8px;border-radius:8px;display:inline-block;margin-bottom:8px}
+ul{padding-left:20px;color:var(--mute)}li{margin:6px 0}
+.band{background:var(--ink);color:#e7f2fa;border-radius:24px;padding:28px}
+.band h2{color:#fff}.band p,.band li{color:#b8cfe0}
+footer{padding:30px 0 60px;color:var(--mute);font-size:14px}
+@media(max-width:760px){.hero{grid-template-columns:1fr}nav a{display:none}}
+</style></head><body><div class="wrap">
+<nav><b><img src="favicon.svg" alt="">botwatch</b><div><a href="#commands">Commands</a><a href="#alerts">Alerts</a><a href="#privacy">Privacy</a></div></nav>
+<header class="hero"><div>
+<h1>BOTScan, <span>but it taps you on the shoulder.</span></h1>
+<p>BOTScan has no notifications: you have to refresh an address page to see if anything happened. botwatch is a Telegram bot that pushes it to you.</p>
+<div class="soon"><span class="dot"></span>Bot launching soon. It is not live yet, so there is nothing to message today.</div></div>
+<div class="phone" role="img" aria-label="Example conversation, illustrative only">
+<div class="msg me">/watch 0x37b7…0c10 treasury</div>
+<div class="msg">Watching <b>treasury</b>. Existing history recorded; I'll message you about new transactions.</div>
+<div class="msg me">/alert bot above 15</div>
+<div class="msg">Alert set: WBOT above 15 USD. It fires once.</div>
+<p class="cap">Illustrative example. Not a real chat.</p></div></header>
+
+<section id="commands"><h2>Commands</h2><p class="lead">Six commands. No setup beyond pasting an address.</p>
+<div class="grid">
+<div class="card"><span class="cmd">/watch 0x… [label]</span><p>A message for every new transaction on a wallet or contract.</p></div>
+<div class="card"><span class="cmd">/alert bot above 15</span><p>One-shot BDEX price alert. Use <code>bot</code> for WBOT or a token address, and <code>above</code> or <code>below</code>.</p></div>
+<div class="card"><span class="cmd">/price</span><p>Current price, using BOTScan's rate.</p></div>
+<div class="card"><span class="cmd">/list</span><p>Your watched addresses and active price alerts.</p></div>
+<div class="card"><span class="cmd">/unwatch</span><p>Stop watching an address.</p></div>
+<div class="card"><span class="cmd">/unalert &lt;id&gt;</span><p>Remove a price alert.</p></div>
+</div></section>
+
+<section id="alerts"><h2>Alert types</h2>
+<div class="grid">
+<div class="card"><h3>Transaction alerts</h3><p>Direction (in or out), method, amount and a link to the transaction on BOTScan. The first time an address is seen its history is recorded silently; only later transactions alert.</p></div>
+<div class="card"><h3>Price alerts</h3><p>Fires once when the price crosses your line, then switches off. Price is BOTScan's rate for the token; tokens without a rate are refused.</p></div>
+<div class="card"><h3>Flood control</h3><p>At most 5 alerts per address per cycle, then "…and N more". Up to 20 watches and 20 alerts per chat.</p></div>
+</div></section>
+
+<section id="privacy"><div class="band"><h2>Read-only by design</h2>
+<ul><li>Uses only public BOTScan data. No keys, no wallet connection, no transactions.</li>
+<li>Polite to the API: one request per at least 1.1 seconds globally, with a short response cache.</li>
+<li>Stores only your chat id and the addresses you watch.</li>
+<li>Launch status: the bot has not been registered with Telegram and no token exists. It is tested against a mocked BOTScan (13 tests) and can be tried locally without Telegram. Launching soon.</li></ul></div></section>
+<footer>botwatch is an independent tool for BOT Chain. Not affiliated with Telegram. No bot link yet because the bot is not live.</footer>
+</div></body></html>
